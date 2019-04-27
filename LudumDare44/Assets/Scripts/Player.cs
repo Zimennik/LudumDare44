@@ -15,7 +15,7 @@ public class Player : MonoBehaviour
     public FirstPersonAIO FpsController;
 
     //UI
-    public Slider HealthBar;
+    public Image HealthBar;
 
     public Slider HungryBar;
     public Slider ThirstyBar;
@@ -35,7 +35,7 @@ public class Player : MonoBehaviour
         set
         {
             _health = Mathf.Clamp(value, 0, MAX_HEALTH);
-            HealthBar.value = _health;
+            HealthBar.fillAmount = (float)_health/(float)MAX_HEALTH;
         }
     }
 
@@ -59,16 +59,36 @@ public class Player : MonoBehaviour
         }
     }
 
-    public int Temperature
+    public void AddItem(InventoryItem item)
     {
-        get { return _temperature; }
-        set
-        {
-            _temperature = Mathf.Clamp(value, 0, 100);
-            TemperatureBar.value = _temperature;
-        }
+        Inventory.Add(item);
     }
 
+    public void RemoveItem(InventoryItem item)
+    {
+        Inventory.Remove(item);
+    }
+
+    public void MoveItemToShelter(InventoryItem item)
+    {
+        GameManager.Instance.Shelter.AddItem(item);
+        RemoveItem(item);
+    }
+
+    public void Reset()
+    {
+        Health = MAX_HEALTH;
+        Hungry = 100;
+        Thirsty = 100;
+        Inventory.Clear();
+    }
+
+    public void NextDay()
+    {
+        Health += GameManager.Instance.Shelter.HasItem("Bed") ? 6 : 3;
+        Hungry -= 35;
+        Thirsty -= 55;
+    }
 
     public void Update()
     {
