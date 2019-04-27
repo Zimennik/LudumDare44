@@ -8,12 +8,12 @@ public class Player : MonoBehaviour
     public const float DISTANCE_TO_INTERACT = 1.5f;
     public List<InventoryItem> Inventory = new List<InventoryItem>();
 
-    
+
     private InteractableItem _currentSelected;
 
     public Camera PlayerCamera;
-    public FPSController FpsController;
-    
+    public FirstPersonAIO FpsController;
+
     //UI
     public Slider HealthBar;
 
@@ -27,6 +27,7 @@ public class Player : MonoBehaviour
     private int _thirsty;
     private int _temperature;
 
+    public LayerMask LayerMask;
 
     public int Health
     {
@@ -68,16 +69,22 @@ public class Player : MonoBehaviour
         }
     }
 
-    
+
     public void Update()
     {
         Ray ray = PlayerCamera.ViewportPointToRay(new Vector3(0.5F, 0.5F, 0));
         RaycastHit hit;
-        
-        if (Physics.Raycast(ray, out hit))
+
+        if (Physics.Raycast(ray, out hit, 1000, LayerMask))
         {
             InteractableItem item = hit.transform.GetComponent<InteractableItem>();
-         
+
+            if (Input.GetKeyDown(KeyCode.R))
+            {
+                print(hit.transform.name);
+                print(hit.transform.gameObject.layer);
+            }
+
             if (item != null && Vector3.Distance(transform.position, hit.point) <= DISTANCE_TO_INTERACT)
             {
                 if (_currentSelected != item)
@@ -94,7 +101,7 @@ public class Player : MonoBehaviour
                 {
                     _currentSelected.InteractionStarted -= OnInteractionStarted;
                     _currentSelected.InteractionComplete -= OnInteractionComplete;
-                    
+
                     _currentSelected.Deselect();
                     _currentSelected = null;
                 }
@@ -109,12 +116,13 @@ public class Player : MonoBehaviour
 
     public void OnInteractionStarted()
     {
-        FpsController.SetControl(false);
+        FpsController.enableCameraMovement = false;
+        FpsController.playerCanMove = false;
     }
-    
+
     public void OnInteractionComplete()
     {
-        
-        FpsController.SetControl(true);
+        FpsController.enableCameraMovement = true;
+        FpsController.playerCanMove = true;
     }
 }

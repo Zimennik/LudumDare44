@@ -4,25 +4,34 @@ using cakeslice;
 using TMPro;
 using UnityEngine;
 
-[RequireComponent(typeof(Outline))]
+//[RequireComponent(typeof(Outline))]
 [RequireComponent(typeof(Collider))]
 public abstract class InteractableItem : MonoBehaviour
 {
     private Outline _outline;
     public float TimeToInteract = 0f;
-    public GameObject InteractText;
+    public TextMeshPro InteractText;
     public TextMeshPro InteractProgress;
 
     public event Action InteractionStarted;
     public event Action InteractionComplete;
 
+    private string defaultText = "Press E to ";
+    public string ActionText = "Interact";
+    public string InteractingText = "Interacting";
+    
     private Coroutine _interactCoroutine;
+
+    public bool IsBroken = false;
 
     public void Start()
     {
         InteractProgress.gameObject.SetActive(false);
         _outline = GetComponent<Outline>();
-        _outline.enabled = false;
+        if (_outline != null)
+        {
+            _outline.enabled = false;
+        }
     }
 
     public virtual void Interact()
@@ -37,16 +46,21 @@ public abstract class InteractableItem : MonoBehaviour
 
     public virtual void Select()
     {
-        if (_outline == null) return;
-        _outline.enabled = true;
-        InteractText.SetActive(true);
+        if (_outline != null)
+        {
+            _outline.enabled = true;
+        }
+        InteractText.gameObject.SetActive(true);
+        InteractText.text = defaultText + (IsBroken ? "repair" : ActionText);
     }
 
     public virtual void Deselect()
     {
-        if (_outline == null) return;
-        _outline.enabled = false;
-        InteractText.SetActive(false);
+        if (_outline != null)
+        {
+            _outline.enabled = false;
+        }
+        InteractText.gameObject.SetActive(false);
     }
 
 
@@ -55,12 +69,13 @@ public abstract class InteractableItem : MonoBehaviour
         if (InteractionStarted != null) InteractionStarted();
         InteractProgress.gameObject.SetActive(true);
         
+        
         DateTime startTime = DateTime.Now;
         DateTime finishTime = startTime.AddSeconds(TimeToInteract);
 
         while (DateTime.Now < finishTime)
         {
-            InteractProgress.text = (finishTime - DateTime.Now).TotalSeconds.ToString("0") + "s";
+            InteractProgress.text = InteractingText+": "+(finishTime - DateTime.Now).TotalSeconds.ToString("0") + "s";
             yield return new WaitForSeconds(0.1f);
         }
         InteractProgress.gameObject.SetActive(false);

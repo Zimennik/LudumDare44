@@ -7,7 +7,7 @@ public class TestBox : InteractableItem
    
    public override void OnInteractFinished()
    {
-      print("You kill this box...");
+      MessageBox.Instance.ShowText("You kill this box...");
       Destroy(gameObject);
    }
    
