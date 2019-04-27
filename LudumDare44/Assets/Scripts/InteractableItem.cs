@@ -22,6 +22,7 @@ public abstract class InteractableItem : MonoBehaviour
     public string InteractingText = "Interacting";
 
     private Coroutine _interactCoroutine;
+   // public GameObject MeshToOutline;
 
     public bool IsBroken = false;
 

@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Exit : InteractableItem
+public class Enter : InteractableItem
 {
    public override void OnInteractFinished()
    {
-      GameManager.Instance.TeleportToSurface();
+       GameManager.Instance.TeleportToShelter();
+     // MessageBox.Instance.ShowText("You did well!");
    }
 }
