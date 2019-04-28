@@ -14,6 +14,8 @@ public abstract class InteractableItem : MonoBehaviour
     public TextMeshPro InteractText;
     public TextMeshPro InteractProgress;
 
+    public GameObject BrokenIndicator;
+    
     public event Action InteractionStarted;
     public event Action InteractionComplete;
 
@@ -24,11 +26,22 @@ public abstract class InteractableItem : MonoBehaviour
     private Coroutine _interactCoroutine;
    // public GameObject MeshToOutline;
 
-    public bool IsBroken = false;
+    private bool _isBroken = false;
+
+    public bool IsBroken
+    {
+        get { return _isBroken; }
+        set
+        {
+            _isBroken = value;
+            BrokenIndicator?.SetActive(value);
+        }
+    }
 
     public void Start()
     {
-        InteractProgress.gameObject.SetActive(false);
+        
+       // InteractProgress.gameObject.SetActive(false);
         _outline = GetComponent<Outline>();
         if (_outline != null)
         {
@@ -65,8 +78,10 @@ public abstract class InteractableItem : MonoBehaviour
         {
             _outline.enabled = true;
         }
-        InteractText.gameObject.SetActive(true);
-        InteractText.text = defaultText + (IsBroken ? "repair" : ActionText);
+        MessageBox.Instance.ShowInteractText(defaultText + (IsBroken ? "repair" : ActionText));
+        
+        //InteractText.gameObject.SetActive(true);
+        //InteractText.text = defaultText + (IsBroken ? "repair" : ActionText);
     }
 
     public virtual void Deselect()
@@ -75,7 +90,8 @@ public abstract class InteractableItem : MonoBehaviour
         {
             _outline.enabled = false;
         }
-        InteractText.gameObject.SetActive(false);
+        MessageBox.Instance.HideInteractText();
+       // InteractText.gameObject.SetActive(false);
     }
 
     public void Refresh()
@@ -91,7 +107,7 @@ public abstract class InteractableItem : MonoBehaviour
     IEnumerator Interacting()
     {
         if (InteractionStarted != null) InteractionStarted();
-        InteractProgress.gameObject.SetActive(true);
+      //  InteractProgress.gameObject.SetActive(true);
 
 
         DateTime startTime = DateTime.Now;
@@ -99,11 +115,16 @@ public abstract class InteractableItem : MonoBehaviour
 
         while (DateTime.Now < finishTime)
         {
-            InteractProgress.text = (IsBroken ? "Repairing" : InteractingText) + ": " +
-                                    (finishTime - DateTime.Now).TotalSeconds.ToString("0") + "s";
+        MessageBox.Instance.ShowProgress((IsBroken ? "Repairing" : InteractingText) + ": " +
+                                   (finishTime - DateTime.Now).TotalSeconds.ToString("0") + "s");     
+            
+            //    InteractProgress.text = (IsBroken ? "Repairing" : InteractingText) + ": " +
+        //                            (finishTime - DateTime.Now).TotalSeconds.ToString("0") + "s";
             yield return new WaitForSeconds(0.1f);
         }
-        InteractProgress.gameObject.SetActive(false);
+       // InteractProgress.gameObject.SetActive(false);
+        
+        MessageBox.Instance.HideProgress();
         _interactCoroutine = null;
 
         if (!IsBroken)

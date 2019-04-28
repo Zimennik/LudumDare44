@@ -8,6 +8,7 @@ public class Radio : InteractableItem
 
     public void Awake()
     {
+        IsBroken = true;
         Info.Add("Day first. Azaza. ......... .. . .");
         Info.Add("");
         Info.Add("");

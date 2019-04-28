@@ -34,26 +34,70 @@ public class Shelter : MonoBehaviour
         }
     }
 
-    public bool IsBedBuilded;
-    public bool IsFarmBuilded;
-    public bool IsFilterBuilded;
-    public int LampsCount;
-    public bool IsFurnaceBuilded;
-    public bool IsElectroFurnaceBuilded;
+
+    public InventoryItem FoodPrefab;
+    public void Start()
+    {
+        AddItem(FoodPrefab);
+    }
+
+    public ItemHolder FoodShelf;
+    public ItemHolder WaterShelf;
+    public ItemHolder FuelShelf;
+    public ItemHolder WoodShelf;
+    public ItemHolder LightBulbsShelf;
+    public ItemHolder ToolboxShelf;
+    public ItemHolder NailsShelf;
+    public ItemHolder WiresShelf;
+
+    //Buildable items
+    public ItemHolder BedHolder;
+
+    public ItemHolder FarmHolder;
+    public ItemHolder WaterFilterHolder;
+    public ItemHolder LampsHolder;
+    public ItemHolder FurnaceHolder;
+    public ItemHolder HeaterHolder;
+
 
     public void AddItem(InventoryItem item)
     {
         InventoryItems.Add(item);
+
+
+        RefreshHolders(item.Name);
     }
 
     public void RemoveItem(InventoryItem item)
     {
         InventoryItems.Remove(item);
+        
+        
+       RefreshHolders(item.Name);
     }
 
-    public void RemoveItemFromInventory(string itemName)
+
+    public void RefreshHolders(string itemName)
     {
-        InventoryItems.Remove(InventoryItems.FirstOrDefault(x => x.Name == itemName));
+        
+        switch (itemName)
+        {
+            case "Food":
+                FoodShelf.SetCount(InventoryItems.Count(x => x.Name == "Food"));
+                break;
+            case "Water":
+                WaterShelf.SetCount(InventoryItems.Count(x => x.Name == "Water"));
+                break;
+            case "Fuel":
+                FuelShelf.SetCount(InventoryItems.Count(x => x.Name == "Fuel"));
+                break;
+            case "Wood":
+                WoodShelf.SetCount(InventoryItems.Count(x => x.Name == "Wood"));
+                break;
+            case "Lightbulb":
+                LightBulbsShelf.SetCount(InventoryItems.Count(x => x.Name == "Lightbulb"));
+                break;
+        }
     }
 
     public bool HasItem(string itemName)

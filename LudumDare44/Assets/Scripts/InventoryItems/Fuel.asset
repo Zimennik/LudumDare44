@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 497130fe05f64545b2a7a89485db0277, type: 3}
   m_Name: Fuel
   m_EditorClassIdentifier: 
-  Name: 
+  Name: Fuel
   Texture: {fileID: 0}

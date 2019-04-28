@@ -35,7 +35,7 @@ public class Player : MonoBehaviour
         set
         {
             _health = Mathf.Clamp(value, 0, MAX_HEALTH);
-            HealthBar.fillAmount = (float)_health/(float)MAX_HEALTH;
+            HealthBar.fillAmount = (float) _health / (float) MAX_HEALTH;
         }
     }
 
@@ -92,18 +92,25 @@ public class Player : MonoBehaviour
 
     public void Update()
     {
+        //test
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            int r1 = Random.Range(0, 15);
+            int r2 = Random.Range(0, 15);
+            int r3 = Random.Range(0, 15);
+            
+            GameManager.Instance.Shelter.FoodShelf.SetCount(r1);
+            GameManager.Instance.Shelter.WaterShelf.SetCount(r2);
+            GameManager.Instance.Shelter.FuelShelf.SetCount(r3);
+            
+        }
+
         Ray ray = PlayerCamera.ViewportPointToRay(new Vector3(0.5F, 0.5F, 0));
         RaycastHit hit;
 
         if (Physics.Raycast(ray, out hit, 1000, LayerMask))
         {
             InteractableItem item = hit.transform.GetComponent<InteractableItem>();
-
-            if (Input.GetKeyDown(KeyCode.R))
-            {
-                print(hit.transform.name);
-                print(hit.transform.gameObject.layer);
-            }
 
             if (item != null && Vector3.Distance(transform.position, hit.point) <= DISTANCE_TO_INTERACT)
             {

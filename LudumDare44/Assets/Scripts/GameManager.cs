@@ -30,6 +30,8 @@ public class GameManager : MonoBehaviour
 
     public void NextDay()
     {
+        Shelter.NextDay();
+        Player.NextDay();
     }
 
     public void GameOver()
