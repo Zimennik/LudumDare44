@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-//Modifiers:     Temperature>50 (+1)
+//Modifiers:     Temperature>0 (+1)
 //               Light (+1)
 
 public class Farm : InteractableItem
@@ -25,7 +25,7 @@ public class Farm : InteractableItem
     {
         int modifier = 0;
         modifier += GameManager.Instance.Shelter.Lamp.IsOn ? 1 : 0;
-        modifier += GameManager.Instance.Shelter.Temperature > 50 ? 1 : 0;
+        modifier += GameManager.Instance.Shelter.Temperature > 1 ? 1 : 0;
 
         if (CanCollect) return;
 
@@ -56,7 +56,7 @@ public class Farm : InteractableItem
             int modifier = 0;
             modifier += GameManager.Instance.Shelter.Lamp.IsOn ? 1 : 0;
             modifier += GameManager.Instance.Shelter.Temperature > 50 ? 1 : 0;
-            int res = DaysLeft - modifier;
+            int res = Mathf.Clamp(DaysLeft - modifier,1,100);
 
             MessageBox.Instance.ShowText("You need to wait " + res + " more day" + (res > 1 ? "s" : ""));
         }

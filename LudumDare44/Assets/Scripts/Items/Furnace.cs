@@ -48,6 +48,6 @@ public class Furnace : InteractableItem
             }
         }
 
-        GameManager.Instance.Shelter.Temperature += 100;
+        GameManager.Instance.Shelter.Temperature += 33;
     }
 }

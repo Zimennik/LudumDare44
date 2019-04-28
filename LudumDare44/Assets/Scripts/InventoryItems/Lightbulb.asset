@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: Lightbulb
   m_EditorClassIdentifier: 
   Name: Lightbulb
-  Texture: {fileID: 21300000, guid: adf2858418cef6c479794e214e87cfbb, type: 3}
+  Texture: {fileID: 21300000, guid: a810ba5f88020194aa43075f61edea75, type: 3}

@@ -40,7 +40,8 @@ public class Shelter : MonoBehaviour
     
     //Buildings
     public Lamp Lamp;
-    
+
+    public Farm Farm;
     
     
     public void Start()
@@ -161,7 +162,13 @@ public class Shelter : MonoBehaviour
             Lamp.NextDay();
         }
 
-        Temperature -= 24;
+        if (Farm.isActiveAndEnabled)
+        {
+            Farm.NextDay();
+        }
+        
+
+        Temperature -= 33;
 
         //  Energy -= LampsCount
     }

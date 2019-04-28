@@ -49,6 +49,10 @@ public class Player : MonoBehaviour
             HealthBar.fillAmount = (float) _health / (float) MAX_HEALTH;
 
             HealthBar.rectTransform.DOPunchScale(new Vector3(0.5f, 0.5f, 0.5f), 0.3f, 1, 0.3f);
+            if (Health <= 0)
+            {
+                GameManager.Instance.GameOver(GameManager.GameoverReasone.Health);
+            }
         }
     }
 

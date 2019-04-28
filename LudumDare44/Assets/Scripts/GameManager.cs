@@ -53,6 +53,19 @@ public class GameManager : MonoBehaviour
 
     public void GameOver(GameoverReasone reasone)
     {
+        Player.FpsController.playerCanMove = false;
+        Player.FpsController.enableCameraMovement = false;
+        
+        NextDayUI.color = new Color(0,0,0,0);
+        NextDayUI.gameObject.SetActive(true);
+        NextDayUI.DOFade(1, 1f);
+
+        var pos = Player.FpsController.playerCamera.localPosition.y;
+        var rot = Player.FpsController.playerCamera.localEulerAngles;
+        rot.z += 90;
+        Player.FpsController.playerCamera.DOLocalMoveY(pos - 0.5f, 1f);
+        Player.FpsController.playerCamera.DOLocalRotate(rot, 1f);
+        
         string result = "YOU DIED \nfrom ";
 
         switch (reasone)
@@ -75,6 +88,8 @@ public class GameManager : MonoBehaviour
         
         MessageBox.Instance.ShowText(result,999);
 
+        
+        
         _isGameOver = true;
 
     }
@@ -83,6 +98,8 @@ public class GameManager : MonoBehaviour
     {
         string result = "YOU SURVIVE!\nThe military came and saved you.\n* Insert cutscene here *\nWell done!" +
                         "\n\n\n\n\n\nPree E to exit";
+        
+        MessageBox.Instance.ShowText(result,999);
         _isGameOver = true;
     }
 
@@ -116,12 +133,12 @@ public class GameManager : MonoBehaviour
         
         NextDayUI.color = new Color(0,0,0,0);
         NextDayUI.gameObject.SetActive(true);
-        NextDayUI.DOFade(1, 3f);
-        yield return new WaitForSeconds(4f);
+        NextDayUI.DOFade(1, 1f);
+        yield return new WaitForSeconds(1f);
             
         CurrentDay++;
 
-        if (CurrentDay == 20)
+        if (CurrentDay >= 19)
         {
             Victory();
             yield break;
@@ -150,12 +167,12 @@ public class GameManager : MonoBehaviour
         
         MessageBox.Instance.ShowText("Day " + (CurrentDay+1));
         
-        yield return new WaitForSeconds(5);
+        yield return new WaitForSeconds(2);
         
-        NextDayUI.DOFade(0, 3f);
+        NextDayUI.DOFade(0, 1f);
         
         
-        yield return new WaitForSeconds(3f);
+        yield return new WaitForSeconds(1f);
         
         
         
@@ -163,5 +180,7 @@ public class GameManager : MonoBehaviour
         Player.FpsController.playerCanMove = true;
         Player.CanInteract = true;
     }
+    
+    
    
 }

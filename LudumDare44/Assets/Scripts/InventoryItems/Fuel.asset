@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: Fuel
   m_EditorClassIdentifier: 
   Name: Fuel
-  Texture: {fileID: 0}
+  Texture: {fileID: 21300000, guid: 38bd326983de5b946b520e1ae6be22ea, type: 3}

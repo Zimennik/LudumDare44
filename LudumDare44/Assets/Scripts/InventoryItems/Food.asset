@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: Food
   m_EditorClassIdentifier: 
   Name: Food
-  Texture: {fileID: 0}
+  Texture: {fileID: 21300000, guid: aafda8d22a23bb14fba360908dcccd34, type: 3}

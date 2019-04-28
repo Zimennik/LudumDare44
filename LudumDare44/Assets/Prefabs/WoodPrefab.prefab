@@ -58,13 +58,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f9b2ca53fbf60c46be55e92fe8dc502, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TimeToInteract: 3
+  TimeToInteract: 1
   TimeToRepair: 0
   InteractText: {fileID: 0}
   InteractProgress: {fileID: 0}
   BrokenIndicator: {fileID: 0}
   ActionText: Disassemble the fence
   InteractingText: Disassembling
+  Description: 
+  DontStopPlayer: 0
   Item: {fileID: 11400000, guid: 7e0e5c261924b5f428142e920db40c3c, type: 2}
   IsToolboxNeeded: 1
   AddItemToShelter: 0
