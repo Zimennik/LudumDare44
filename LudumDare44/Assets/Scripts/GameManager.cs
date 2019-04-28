@@ -159,7 +159,7 @@ public class GameManager : MonoBehaviour
             GameOver(GameoverReasone.Health);
             yield break;
         }
-        if (Player.Health <= 0)
+        if (Player.Hungry <= 0)
         {
             GameOver(GameoverReasone.Food);
             yield break;
