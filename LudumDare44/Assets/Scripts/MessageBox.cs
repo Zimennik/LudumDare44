@@ -14,7 +14,7 @@ public class MessageBox : MonoBehaviour
 
     public TextMeshProUGUI InteractText;
     public TextMeshProUGUI ProgressText;
-    
+
 
     public void Awake()
     {
@@ -38,7 +38,7 @@ public class MessageBox : MonoBehaviour
 
         TextBox.text = text;
 
-        TextBox.color = new Color(1,1,1,0);
+        TextBox.color = new Color(1, 1, 1, 0);
         TextBox.DOFade(1, 0.3f);
         while (DateTime.Now < finishTime)
         {
@@ -51,12 +51,14 @@ public class MessageBox : MonoBehaviour
 
     public void ShowInteractText(string text)
     {
+        if (InteractText == null) return;
         InteractText.gameObject.SetActive(true);
         InteractText.text = text;
     }
 
     public void HideInteractText()
     {
+        if (InteractText == null) return;
         InteractText.gameObject.SetActive(false);
     }
 
