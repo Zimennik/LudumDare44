@@ -5,6 +5,6 @@
     public class InventoryItem : ScriptableObject
     {
         public string Name;
-        public Texture2D Texture;
+        public Sprite Texture;
         
     }

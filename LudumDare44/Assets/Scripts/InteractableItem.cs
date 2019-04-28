@@ -28,6 +28,8 @@ public abstract class InteractableItem : MonoBehaviour
 
     private bool _isBroken = false;
 
+    public event Action ItemDestroy;
+    
     public bool IsBroken
     {
         get { return _isBroken; }
@@ -138,5 +140,10 @@ public abstract class InteractableItem : MonoBehaviour
         }
 
         if (InteractionComplete != null) InteractionComplete();
+    }
+
+    public void OnDestroy()
+    {
+        if (ItemDestroy != null) ItemDestroy();
     }
 }

@@ -25,7 +25,7 @@ public class GameManager : MonoBehaviour
         Player.Reset();
         Shelter.Reset();
 
-        StartCoroutine(HealthDecrease());
+        
     }
 
     public void NextDay()
@@ -42,21 +42,15 @@ public class GameManager : MonoBehaviour
     {
         Player.transform.position = SurfaceEntryPoint.position;
         Player.transform.rotation = Quaternion.Euler(new Vector3(0,90,0));
+        Player.GoOutside();
     }
 
     public void TeleportToShelter()
     {
         Player.transform.position = ShelterEntryPoint.position;
         Player.transform.rotation = Quaternion.Euler(new Vector3(0,90,0));
-        //Player.FpsController.
+        Player.GoInside();
     }
 
-    IEnumerator HealthDecrease()
-    {
-        while (Player.Health >= 0)
-        {
-            Player.Health--;
-            yield return new WaitForSeconds(1);
-        }
-    }
+   
 }

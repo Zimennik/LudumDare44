@@ -36,6 +36,7 @@ public class Shelter : MonoBehaviour
 
 
     public InventoryItem FoodPrefab;
+
     public void Start()
     {
         AddItem(FoodPrefab);
@@ -71,15 +72,14 @@ public class Shelter : MonoBehaviour
     public void RemoveItem(InventoryItem item)
     {
         InventoryItems.Remove(item);
-        
-        
-       RefreshHolders(item.Name);
+
+
+        RefreshHolders(item.Name);
     }
 
 
     public void RefreshHolders(string itemName)
     {
-        
         switch (itemName)
         {
             case "Food":
@@ -96,6 +96,9 @@ public class Shelter : MonoBehaviour
                 break;
             case "Lightbulb":
                 LightBulbsShelf.SetCount(InventoryItems.Count(x => x.Name == "Lightbulb"));
+                break;
+            case "Toolbox":
+                ToolboxShelf.SetCount(InventoryItems.Count(x => x.Name == "Toolbox"));
                 break;
         }
     }

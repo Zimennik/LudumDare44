@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -9,7 +11,7 @@ public class Player : MonoBehaviour
     public List<InventoryItem> Inventory = new List<InventoryItem>();
 
 
-    private InteractableItem _currentSelected;
+    public InteractableItem _currentSelected;
 
     public Camera PlayerCamera;
     public FirstPersonAIO FpsController;
@@ -28,6 +30,10 @@ public class Player : MonoBehaviour
     private int _temperature;
 
     public LayerMask LayerMask;
+
+    public Image InvItem1;
+    public Image InvItem2;
+    public Image InvItem3;
 
     public int Health
     {
@@ -62,10 +68,44 @@ public class Player : MonoBehaviour
     public void AddItem(InventoryItem item)
     {
         Inventory.Add(item);
+
+        if (Inventory.Count == 1)
+        {
+            InvItem1.gameObject.SetActive(true);
+            InvItem1.sprite = item.Texture;
+        }
+        if (Inventory.Count == 2)
+        {
+            InvItem2.gameObject.SetActive(true);
+            InvItem2.sprite = item.Texture;
+        }
+        if (Inventory.Count == 3)
+        {
+            InvItem3.gameObject.SetActive(true);
+            InvItem3.sprite = item.Texture;
+        }
     }
 
     public void RemoveItem(InventoryItem item)
     {
+        int itemId = Inventory.IndexOf(item);
+
+        print(itemId);
+
+        if (itemId == 0)
+        {
+            InvItem1.gameObject.SetActive(false);
+        }
+        if (itemId == 1)
+        {
+            InvItem2.gameObject.SetActive(false);
+        }
+        if (itemId == 2)
+        {
+            InvItem3.gameObject.SetActive(false);
+        }
+
+
         Inventory.Remove(item);
     }
 
@@ -81,6 +121,7 @@ public class Player : MonoBehaviour
         Hungry = 100;
         Thirsty = 100;
         Inventory.Clear();
+        GoInside();
     }
 
     public void NextDay()
@@ -90,21 +131,44 @@ public class Player : MonoBehaviour
         Thirsty -= 55;
     }
 
-    public void Update()
+
+    private Coroutine loosingHealth;
+
+    public void GoInside()
     {
-        //test
-        if (Input.GetKeyDown(KeyCode.R))
+        if (loosingHealth != null)
         {
-            int r1 = Random.Range(0, 15);
-            int r2 = Random.Range(0, 15);
-            int r3 = Random.Range(0, 15);
-            
-            GameManager.Instance.Shelter.FoodShelf.SetCount(r1);
-            GameManager.Instance.Shelter.WaterShelf.SetCount(r2);
-            GameManager.Instance.Shelter.FuelShelf.SetCount(r3);
-            
+            StopCoroutine(loosingHealth);
+            loosingHealth = null;
         }
 
+        while (Inventory.Count > 0)
+        {
+            MoveItemToShelter(Inventory.Last());
+        }
+    }
+
+    public void GoOutside()
+    {
+        if (loosingHealth == null)
+        {
+            loosingHealth = StartCoroutine(LoosingHealth());
+        }
+    }
+
+    IEnumerator LoosingHealth()
+    {
+        while (Health > 0)
+        {
+            yield return new WaitForSeconds(1);
+            Health--;
+        }
+    }
+
+    public void Update()
+    {
+        DeselectCurrent();
+     
         Ray ray = PlayerCamera.ViewportPointToRay(new Vector3(0.5F, 0.5F, 0));
         RaycastHit hit;
 
@@ -119,26 +183,35 @@ public class Player : MonoBehaviour
                     _currentSelected = item;
                     _currentSelected.InteractionStarted += OnInteractionStarted;
                     _currentSelected.InteractionComplete += OnInteractionComplete;
+                    _currentSelected.ItemDestroy += OnItemWasDestroyed;
                     item.Select();
                 }
             }
-            else
-            {
-                if (_currentSelected != null)
-                {
-                    _currentSelected.InteractionStarted -= OnInteractionStarted;
-                    _currentSelected.InteractionComplete -= OnInteractionComplete;
-
-                    _currentSelected.Deselect();
-                    _currentSelected = null;
-                }
-            }
         }
+
 
         if (Input.GetKeyDown(KeyCode.E))
         {
             _currentSelected?.Interact();
         }
+    }
+
+    private void DeselectCurrent()
+    {
+        if (_currentSelected != null)
+        {
+            _currentSelected.InteractionStarted -= OnInteractionStarted;
+            _currentSelected.InteractionComplete -= OnInteractionComplete;
+            _currentSelected.ItemDestroy -= OnItemWasDestroyed;
+
+            _currentSelected.Deselect();
+            _currentSelected = null;
+        }
+    }
+
+    public void OnItemWasDestroyed()
+    {
+        DeselectCurrent();
     }
 
     public void OnInteractionStarted()
