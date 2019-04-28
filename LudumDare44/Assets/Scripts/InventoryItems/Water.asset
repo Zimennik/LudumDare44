@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: Water
   m_EditorClassIdentifier: 
   Name: Water
-  Texture: {fileID: 0}
+  Texture: {fileID: 21300000, guid: fed0c42f36419684cb7c3b8a9dd894d5, type: 3}

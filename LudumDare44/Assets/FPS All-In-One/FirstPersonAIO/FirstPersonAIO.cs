@@ -271,7 +271,7 @@ public class BETA_SETTINGS{
         {
             GameObject qui = new GameObject("AutoCrosshair");
             qui.AddComponent<RectTransform>();
-            qui.AddComponent<Canvas>();
+            var canv = qui.AddComponent<Canvas>();
             qui.AddComponent<CanvasScaler>();
             qui.AddComponent<GraphicRaycaster>();
             qui.GetComponent<Canvas>().renderMode = RenderMode.ScreenSpaceOverlay;

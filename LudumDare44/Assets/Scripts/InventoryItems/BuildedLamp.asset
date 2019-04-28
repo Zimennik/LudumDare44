@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 497130fe05f64545b2a7a89485db0277, type: 3}
-  m_Name: Wood
+  m_Name: BuildedLamp
   m_EditorClassIdentifier: 
-  Name: Wood
-  Texture: {fileID: 21300000, guid: 812124526232c5b48a1e9d1815a057e7, type: 3}
+  Name: 
+  Texture: {fileID: 0}

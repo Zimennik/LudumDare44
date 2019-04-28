@@ -26,6 +26,12 @@ public class Generator : InteractableItem
             {
                 shelter.RemoveItem(fuel);
                 GameManager.Instance.Shelter.Energy += 50;
+
+
+                if (GameManager.Instance.Shelter.Lamp.gameObject.activeInHierarchy)
+                {
+                    GameManager.Instance.Shelter.Lamp.SetActive(true);
+                }
             }
 
         

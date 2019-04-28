@@ -37,9 +37,30 @@ public class Shelter : MonoBehaviour
 
     public InventoryItem FoodPrefab;
 
+    
+    //Buildings
+    public Lamp Lamp;
+    
+    
+    
     public void Start()
     {
         AddItem(FoodPrefab);
+    }
+
+
+    public void BuildLamp()
+    {
+        var lamp = InventoryItems.FirstOrDefault(x => x.Name == "Lightbulb");
+        if (lamp != null)
+        {
+            RemoveItem(lamp);
+           Lamp.gameObject.SetActive(true);
+        }
+        else
+        {
+            MessageBox.Instance.ShowText("You don't have lightbulb. How did you do this?");
+        }
     }
 
     public ItemHolder FoodShelf;
@@ -59,6 +80,12 @@ public class Shelter : MonoBehaviour
     public ItemHolder LampsHolder;
     public ItemHolder FurnaceHolder;
     public ItemHolder HeaterHolder;
+
+
+
+
+    //
+    public InteractableItem WaterDispenser;
 
 
     public void AddItem(InventoryItem item)
@@ -112,10 +139,43 @@ public class Shelter : MonoBehaviour
     {
         Energy = 0;
         Temperature = 0;
+
+        RefreshHolders("Food");
+        RefreshHolders("Water");
+        RefreshHolders("Fuel");
+        RefreshHolders("Wood");
+        //  RefreshHolders("Lightbulb");
+        RefreshHolders("Toolbox");
     }
 
     public void NextDay()
     {
+        //var waterFilter = InventoryItems.FirstOrDefault(x => x.Name == "WaterFilter");
+        // if (waterFilter != null)
+        {
+            WaterDispenser.NextDay();
+        }
+
+        if (Lamp.isActiveAndEnabled && Lamp.IsOn)
+        {
+            Lamp.NextDay();
+        }
+
+        Temperature -= 24;
+
         //  Energy -= LampsCount
+    }
+
+
+    public void Update()
+    {
+        //test
+        if (!Lamp.gameObject.activeSelf)
+        {
+            if (Input.GetKeyDown(KeyCode.B))
+            {
+                BuildLamp();
+            }
+        }
     }
 }

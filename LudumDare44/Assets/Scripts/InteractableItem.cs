@@ -15,21 +15,24 @@ public abstract class InteractableItem : MonoBehaviour
     public TextMeshPro InteractProgress;
 
     public GameObject BrokenIndicator;
-    
-    public event Action InteractionStarted;
-    public event Action InteractionComplete;
+
+    public event Action<InteractableItem> InteractionStarted;
+    public event Action<InteractableItem> InteractionComplete;
 
     private string defaultText = "Press E to ";
     public string ActionText = "Interact";
     public string InteractingText = "Interacting";
 
+    public string Description = "";
+    public bool DontStopPlayer = false;
+
     private Coroutine _interactCoroutine;
-   // public GameObject MeshToOutline;
+    // public GameObject MeshToOutline;
 
     private bool _isBroken = false;
 
     public event Action ItemDestroy;
-    
+
     public bool IsBroken
     {
         get { return _isBroken; }
@@ -42,8 +45,7 @@ public abstract class InteractableItem : MonoBehaviour
 
     public void Start()
     {
-        
-       // InteractProgress.gameObject.SetActive(false);
+        // InteractProgress.gameObject.SetActive(false);
         _outline = GetComponent<Outline>();
         if (_outline != null)
         {
@@ -58,7 +60,7 @@ public abstract class InteractableItem : MonoBehaviour
             MessageBox.Instance.ShowText("You need Toolbox to repair this item");
             return;
         }
-        
+
 
         if (_interactCoroutine != null) return;
         _interactCoroutine = StartCoroutine(Interacting());
@@ -80,8 +82,11 @@ public abstract class InteractableItem : MonoBehaviour
         {
             _outline.enabled = true;
         }
-        MessageBox.Instance.ShowInteractText(defaultText + (IsBroken ? "repair" : ActionText));
-        
+
+        string text = (string.IsNullOrEmpty(Description) ? "" : "\n" + Description + "\n") +defaultText+
+                      (IsBroken ? "repair" : ActionText);
+        MessageBox.Instance.ShowInteractText(text);
+
         //InteractText.gameObject.SetActive(true);
         //InteractText.text = defaultText + (IsBroken ? "repair" : ActionText);
     }
@@ -93,7 +98,7 @@ public abstract class InteractableItem : MonoBehaviour
             _outline.enabled = false;
         }
         MessageBox.Instance.HideInteractText();
-       // InteractText.gameObject.SetActive(false);
+        // InteractText.gameObject.SetActive(false);
     }
 
     public void Refresh()
@@ -108,8 +113,8 @@ public abstract class InteractableItem : MonoBehaviour
 
     IEnumerator Interacting()
     {
-        if (InteractionStarted != null) InteractionStarted();
-      //  InteractProgress.gameObject.SetActive(true);
+        if (InteractionStarted != null) InteractionStarted(this);
+        //  InteractProgress.gameObject.SetActive(true);
 
 
         DateTime startTime = DateTime.Now;
@@ -117,15 +122,15 @@ public abstract class InteractableItem : MonoBehaviour
 
         while (DateTime.Now < finishTime)
         {
-        MessageBox.Instance.ShowProgress((IsBroken ? "Repairing" : InteractingText) + ": " +
-                                   (finishTime - DateTime.Now).TotalSeconds.ToString("0") + "s");     
-            
+            MessageBox.Instance.ShowProgress((IsBroken ? "Repairing" : InteractingText) + ": " +
+                                             (finishTime - DateTime.Now).TotalSeconds.ToString("0") + "s");
+
             //    InteractProgress.text = (IsBroken ? "Repairing" : InteractingText) + ": " +
-        //                            (finishTime - DateTime.Now).TotalSeconds.ToString("0") + "s";
+            //                            (finishTime - DateTime.Now).TotalSeconds.ToString("0") + "s";
             yield return new WaitForSeconds(0.1f);
         }
-       // InteractProgress.gameObject.SetActive(false);
-        
+        // InteractProgress.gameObject.SetActive(false);
+
         MessageBox.Instance.HideProgress();
         _interactCoroutine = null;
 
@@ -139,7 +144,7 @@ public abstract class InteractableItem : MonoBehaviour
             Refresh();
         }
 
-        if (InteractionComplete != null) InteractionComplete();
+        if (InteractionComplete != null) InteractionComplete(this);
     }
 
     public void OnDestroy()

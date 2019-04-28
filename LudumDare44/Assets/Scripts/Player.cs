@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -19,6 +20,8 @@ public class Player : MonoBehaviour
     //UI
     public Image HealthBar;
 
+    public Image HealthBackground;
+
     public Slider HungryBar;
     public Slider ThirstyBar;
     public Slider TemperatureBar;
@@ -35,6 +38,8 @@ public class Player : MonoBehaviour
     public Image InvItem2;
     public Image InvItem3;
 
+    public bool CanInteract = true;
+
     public int Health
     {
         get { return _health; }
@@ -42,6 +47,8 @@ public class Player : MonoBehaviour
         {
             _health = Mathf.Clamp(value, 0, MAX_HEALTH);
             HealthBar.fillAmount = (float) _health / (float) MAX_HEALTH;
+
+            HealthBar.rectTransform.DOPunchScale(new Vector3(0.5f, 0.5f, 0.5f), 0.3f, 1, 0.3f);
         }
     }
 
@@ -88,24 +95,6 @@ public class Player : MonoBehaviour
 
     public void RemoveItem(InventoryItem item)
     {
-        int itemId = Inventory.IndexOf(item);
-
-        print(itemId);
-
-        if (itemId == 0)
-        {
-            InvItem1.gameObject.SetActive(false);
-        }
-        if (itemId == 1)
-        {
-            InvItem2.gameObject.SetActive(false);
-        }
-        if (itemId == 2)
-        {
-            InvItem3.gameObject.SetActive(false);
-        }
-
-
         Inventory.Remove(item);
     }
 
@@ -126,9 +115,9 @@ public class Player : MonoBehaviour
 
     public void NextDay()
     {
-        Health += GameManager.Instance.Shelter.HasItem("Bed") ? 6 : 3;
-        Hungry -= 35;
-        Thirsty -= 55;
+        Health += GameManager.Instance.Shelter.Temperature>1 ? 10 : 3;
+        Hungry -= 32;    //every 4 days
+        Thirsty -= 48;   //every 2 days
     }
 
 
@@ -146,6 +135,9 @@ public class Player : MonoBehaviour
         {
             MoveItemToShelter(Inventory.Last());
         }
+        InvItem1.gameObject.SetActive(false);
+        InvItem2.gameObject.SetActive(false);
+        InvItem3.gameObject.SetActive(false);
     }
 
     public void GoOutside()
@@ -168,7 +160,9 @@ public class Player : MonoBehaviour
     public void Update()
     {
         DeselectCurrent();
-     
+
+        if (!CanInteract) return;
+
         Ray ray = PlayerCamera.ViewportPointToRay(new Vector3(0.5F, 0.5F, 0));
         RaycastHit hit;
 
@@ -214,14 +208,16 @@ public class Player : MonoBehaviour
         DeselectCurrent();
     }
 
-    public void OnInteractionStarted()
+    public void OnInteractionStarted(InteractableItem item)
     {
+        if (item.DontStopPlayer) return;
         FpsController.enableCameraMovement = false;
         FpsController.playerCanMove = false;
     }
 
-    public void OnInteractionComplete()
+    public void OnInteractionComplete(InteractableItem item)
     {
+        if (item.DontStopPlayer) return;
         FpsController.enableCameraMovement = true;
         FpsController.playerCanMove = true;
     }

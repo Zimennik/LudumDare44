@@ -23,5 +23,8 @@ public class FoodShelf : InteractableItem
         if (food == null) return;
 
         GameManager.Instance.Shelter.RemoveItem(food);
+        
+        GameManager.Instance.Player.Hungry += 100;
+        GameManager.Instance.Player.Health += 5;
     }
 }
