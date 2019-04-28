@@ -118,12 +118,12 @@ public abstract class InteractableItem : MonoBehaviour
 
 
         DateTime startTime = DateTime.Now;
-        DateTime finishTime = startTime.AddSeconds(IsBroken ? TimeToRepair : TimeToInteract);
+        DateTime finishTime = startTime.AddSeconds(IsBroken ? TimeToRepair-1 : TimeToInteract-1);
 
         while (DateTime.Now < finishTime)
         {
             MessageBox.Instance.ShowProgress((IsBroken ? "Repairing" : InteractingText) + ": " +
-                                             (finishTime - DateTime.Now).TotalSeconds.ToString("0") + "s");
+                                             ((finishTime - DateTime.Now).TotalSeconds+1).ToString("0") + "s");
 
             //    InteractProgress.text = (IsBroken ? "Repairing" : InteractingText) + ": " +
             //                            (finishTime - DateTime.Now).TotalSeconds.ToString("0") + "s";

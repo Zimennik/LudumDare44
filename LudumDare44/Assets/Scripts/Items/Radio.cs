@@ -17,7 +17,7 @@ public class Radio : InteractableItem
         Info.Add("***static***");
         Info.Add("We still do not know where this fog came from.");
         Info.Add("***statics***");
-        Info.Add("We begin the search for all the survivors! Suffer a little, we will come!");
+        Info.Add("We start the search operation of all the survivors! Be patient, we'll save you!");
         Info.Add("***static***");//10
         Info.Add("We believe it could be a terrorist attack ...");
         Info.Add("***static***");

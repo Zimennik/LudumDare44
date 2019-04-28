@@ -8,7 +8,7 @@ using UnityEngine;
 
 public class Farm : InteractableItem
 {
-    public const int DAYS_TO_GENERATE_FOOD = 3;
+    public const int DAYS_TO_GENERATE_FOOD = 5;
     public int DaysLeft;
 
     public bool CanCollect = false;
@@ -23,6 +23,8 @@ public class Farm : InteractableItem
 
     public override void NextDay()
     {
+        if(IsBroken)return;
+        
         int modifier = 0;
         modifier += GameManager.Instance.Shelter.Lamp.IsOn ? 1 : 0;
         modifier += GameManager.Instance.Shelter.Temperature > 1 ? 1 : 0;

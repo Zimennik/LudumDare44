@@ -36,6 +36,7 @@ public class Shelter : MonoBehaviour
 
 
     public InventoryItem FoodPrefab;
+    public InventoryItem WoodPrefab;
 
     
     //Buildings
@@ -47,6 +48,7 @@ public class Shelter : MonoBehaviour
     public void Start()
     {
         AddItem(FoodPrefab);
+        AddItem(WoodPrefab);
     }
 
 

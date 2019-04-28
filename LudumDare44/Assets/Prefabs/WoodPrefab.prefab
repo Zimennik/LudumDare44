@@ -58,7 +58,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f9b2ca53fbf60c46be55e92fe8dc502, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TimeToInteract: 1
+  TimeToInteract: 3
   TimeToRepair: 0
   InteractText: {fileID: 0}
   InteractProgress: {fileID: 0}
