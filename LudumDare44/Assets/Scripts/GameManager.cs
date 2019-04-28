@@ -34,6 +34,7 @@ public class GameManager : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.E))
             {
+                Cursor.lockState = CursorLockMode.None; Cursor.visible = true;
                 SceneManager.LoadScene(0);
             }
         }
@@ -55,6 +56,7 @@ public class GameManager : MonoBehaviour
     {
         Player.FpsController.playerCanMove = false;
         Player.FpsController.enableCameraMovement = false;
+       
         
         NextDayUI.color = new Color(0,0,0,0);
         NextDayUI.gameObject.SetActive(true);
